@@ -3,7 +3,6 @@ import mongoose, { Schema, Document, models, model } from "mongoose";
 export interface User extends Document {
   email: string;
   name: string;
-  avatar: string;
   password: string;
   createdAt: Date;
   verifyCode : string;
@@ -20,9 +19,6 @@ const UserSchema: Schema<User> = new Schema({
   name: {
     type: String,
     required: true,
-  },
-  avatar: {
-    type: String,
   },
   password: {
     type: String,
