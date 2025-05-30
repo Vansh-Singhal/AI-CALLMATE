@@ -26,6 +26,7 @@ export async function POST(request: Request) {
 
     const existingUser = await UserDB.findOne({ email });
     const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
+    console.log("VERIFY CODE", verifyCode);
     if (existingUser) {
       if (existingUser.isVerified) {
         return Response.json(
@@ -42,7 +43,6 @@ export async function POST(request: Request) {
         existingUser.password = hashedPassword;
         existingUser.verifyCode = verifyCode;
         existingUser.verifyCodeExpiry = new Date(Date.now() + 3600000);
-
         await existingUser.save();
       }
     } else {
@@ -60,24 +60,19 @@ export async function POST(request: Request) {
       });
 
       await newUser.save();
-
-      //SEND VERIFICATION EMAIL
-      const emailResponse = await sendVerificationEmail(
-        name,
-        email,
-        verifyCode
+    }
+    //SEND VERIFICATION EMAIL
+    const emailResponse = await sendVerificationEmail(name, email, verifyCode);
+    if (!emailResponse.success) {
+      return Response.json(
+        {
+          success: false,
+          message: emailResponse.message,
+        },
+        {
+          status: 500,
+        }
       );
-      if (!emailResponse.success) {
-        return Response.json(
-          {
-            success: false,
-            message: emailResponse.message,
-          },
-          {
-            status: 500,
-          }
-        );
-      }
 
       return Response.json(
         {
