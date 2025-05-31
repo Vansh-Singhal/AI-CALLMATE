@@ -2,13 +2,13 @@ import mongoose, { Schema, Document, model, models } from "mongoose";
 
 export interface Call extends Document {
   roomId: string;
+  hostId: mongoose.Types.ObjectId;
   participants: mongoose.Types.ObjectId[];
   startedAt: Date;
   endedAt?: Date;
+  topic? : string;
   summary?: string;
   transcript?: string;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 const CallSchema: Schema<Call> = new Schema(
@@ -17,6 +17,11 @@ const CallSchema: Schema<Call> = new Schema(
       type: String,
       required: true,
       unique: true,
+    },
+    hostId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
     participants: [
       {
@@ -31,14 +36,16 @@ const CallSchema: Schema<Call> = new Schema(
     endedAt: {
       type: Date,
     },
+    topic: {
+      type: String,
+    },
     summary: {
       type: String,
     },
     transcript: {
       type: String,
     },
-  },
-  { timestamps: true }
+  }
 );
 
 const CallDB = models.Call as mongoose.Model<Call> || model<Call>("Call", CallSchema);
