@@ -23,7 +23,7 @@ export async function POST(request: Request) {
   const { roomId, endedAt } = result.data;
 
   try {
-    const call = await CallDB.findById(roomId);
+    const call = await CallDB.findOne({roomId});
     if (!call) {
       return Response.json({ success: false, message: "Call not found" }, { status: 404 });
     }
