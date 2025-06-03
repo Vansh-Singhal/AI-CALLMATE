@@ -73,17 +73,16 @@ export async function POST(request: Request) {
           status: 500,
         }
       );
-
-      return Response.json(
-        {
-          success: true,
-          message: "User registered Successfully. Please Verify your Email",
-        },
-        {
-          status: 201,
-        }
-      );
     }
+    return Response.json(
+      {
+        success: true,
+        message: "User registered Successfully. Please Verify your Email",
+      },
+      {
+        status: 201,
+      }
+    );
   } catch (error) {
     console.log("Error registering user, Error: ", error);
     return Response.json(

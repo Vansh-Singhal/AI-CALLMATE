@@ -7,7 +7,8 @@ export async function POST(request: Request) {
   connectToDB();
 
   try {
-    const { email, code } = await request.json();
+    let { email, code } = await request.json();
+    email = email.replaceAll("%40","@");
     const result = verifySchema.safeParse({ code });
     if (!result.success) {
       return Response.json(
@@ -19,7 +20,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const user = await UserDB.findOne({ email });
+    const user = await UserDB.findOne({ email: email });
     if (!user) {
       return Response.json(
         {
