@@ -7,7 +7,7 @@ import { createCallSchema } from "@/schema/createCallSchema";
 
 // LiveKit client
 const livekit = new RoomServiceClient(
-  process.env.LIVEKIT_URL!,
+  process.env.NEXT_PUBLIC_LIVEKIT_URL!,
   process.env.LIVEKIT_API_KEY!,
   process.env.LIVEKIT_API_SECRET!
 );
@@ -39,12 +39,14 @@ export async function POST(request: Request) {
     );
   }
 
+  console.log(result);
   const { topic } = result.data;
   const hostId = session.user._id;
+  const hostName = session.user.name;
 
   try {
     const room = await livekit.createRoom({
-      name: `call-${Date.now()}`,
+      name: `${topic}-${hostName}`,
       emptyTimeout: 60 * 5,
       maxParticipants: 4,
     });
