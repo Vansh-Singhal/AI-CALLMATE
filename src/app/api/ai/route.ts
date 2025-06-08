@@ -26,7 +26,7 @@ export async function POST(request: Request) {
         message: "Response generated",
         text,
       },
-      { status: 400 }
+      { status: 200 }
     );
   } catch (error) {
     console.log("Error generating message", error);
